@@ -1,5 +1,5 @@
 "use client";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export function BarPorPilar({
   data,
@@ -12,7 +12,11 @@ export function BarPorPilar({
         <XAxis dataKey="pilar" stroke="#888" fontSize={12} />
         <YAxis stroke="#888" fontSize={12} />
         <Tooltip cursor={{ fill: "rgba(255,255,255,0.05)" }} />
-        <Bar dataKey="valor" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="valor" radius={[4, 4, 0, 0]}>
+          {data.map((entry, i) => (
+            <Cell key={i} fill={entry.color} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
