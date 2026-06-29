@@ -29,6 +29,7 @@ export function IdeasClient({ ideas }: { ideas: Idea[] }) {
   const [filtro, setFiltro] = useState<PilarFilter>("Todas");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingIdea, setEditingIdea] = useState<Idea | undefined>(undefined);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
 
   const filtered =
     filtro === "Todas" ? ideas : ideas.filter((i) => i.pilar === filtro);
@@ -56,10 +57,17 @@ export function IdeasClient({ ideas }: { ideas: Idea[] }) {
   }
 
   async function handleToggleUsada(idea: Idea) {
+    setPendingIds(prev => new Set(prev).add(idea.id));
     try {
       await updateIdeaAction(idea.id, { usada: !idea.usada });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error al actualizar");
+    } finally {
+      setPendingIds(prev => {
+        const n = new Set(prev);
+        n.delete(idea.id);
+        return n;
+      });
     }
   }
 
@@ -128,6 +136,7 @@ export function IdeasClient({ ideas }: { ideas: Idea[] }) {
                 <Checkbox
                   checked={idea.usada}
                   onCheckedChange={() => handleToggleUsada(idea)}
+                  disabled={pendingIds.has(idea.id)}
                 />
               </TableCell>
               <TableCell className="text-right space-x-2">
