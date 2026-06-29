@@ -63,7 +63,6 @@ export function CalendarioClient({ posts }: { posts: Post[] }) {
   const postsMes = posts.filter((p) => p.fecha.startsWith(monthPrefix));
 
   const dias = diasDelMes(refDate);
-  const currentMonthStart = new Date(year, month, 1);
 
   function prevMes() {
     setRefDate(new Date(year, month - 1, 1));
