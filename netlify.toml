@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Plugin oficial de Next.js: habilita SSR, middleware y server actions en Netlify.
+# Declararlo explícitamente evita que un fallo de autodetección sirva el sitio como
+# estático (que produce 404 en las rutas).
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
