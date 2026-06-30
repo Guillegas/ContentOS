@@ -8,7 +8,7 @@ export default async function MetricasPage() {
   return (
     <>
       <AppHeader title="Métricas y Objetivos" subtitle="Mide tu rendimiento" />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <MetricasClient metricas={metricas} objetivos={objetivos} />
       </div>
     </>

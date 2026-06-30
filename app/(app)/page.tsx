@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   return (
     <>
       <AppHeader title="Dashboard" subtitle="Resumen general de tu actividad" />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <DashboardClient posts={posts} ideas={ideas} objetivos={objetivos} />
       </div>
     </>

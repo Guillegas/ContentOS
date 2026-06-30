@@ -7,7 +7,7 @@ export default async function IdeasPage() {
   return (
     <>
       <AppHeader title="Banco de Ideas" subtitle="Captura y prioriza tus ideas" />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <IdeasClient ideas={ideas} />
       </div>
     </>
