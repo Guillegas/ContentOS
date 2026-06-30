@@ -36,6 +36,10 @@
   apilar en móvil.
 - **Tablas:** envueltas en un contenedor con `overflow-x-auto` para permitir scroll horizontal sin romper
   el layout. Aplica a Ideas, Calendario (tabla del mes) y Métricas.
+- **Hook completo en Ideas:** la columna "hook" de la tabla de Ideas hoy se trunca a una línea cortada.
+  El usuario escribe textos largos ahí (hasta ~370 caracteres, casi guiones enteros) y quiere verlos
+  completos de un vistazo. Quitar el truncado: el texto del hook se muestra entero, con saltos de línea
+  (`whitespace-pre-line`), en una celda con ancho razonable que crece en alto según el contenido.
 - **Calendario:** la rejilla de 7 columnas se mantiene pero con `min-width` + `overflow-x-auto` en su
   contenedor para que en móvil se pueda desplazar; celdas y texto reducen tamaño en breakpoints pequeños.
 - **Paddings:** los `p-6` de las páginas pasan a `p-4 md:p-6`.
