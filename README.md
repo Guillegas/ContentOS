@@ -1,8 +1,6 @@
 # ContentOS
 
-> La base central de tu marca personal en redes sociales. Calendario editorial, banco de ideas y métricas — en un solo sitio, accesible desde PC y móvil.
-
-Web app de un solo archivo (`index.html`) con **HTML/CSS/JS puro**, conectada a **Supabase** como base de datos en la nube. Diseño dark, moderno y minimalista estilo dashboard SaaS.
+La base central de tu marca personal en redes sociales: calendario editorial, banco de ideas y métricas de rendimiento — en un solo lugar, protegido por autenticación y listo para escalar.
 
 ## Pilares de contenido
 
@@ -15,73 +13,104 @@ Web app de un solo archivo (`index.html`) con **HTML/CSS/JS puro**, conectada a 
 ## Secciones
 
 1. **Dashboard** — KPIs de seguidores (TikTok + Instagram con delta mensual), posts publicados vs objetivo, ideas pendientes, gráficas de distribución por pilar y estado del pipeline, lista de próximos posts.
-2. **Calendario Editorial** — Vista mensual navegable, posts por día con color por pilar, clic en un día para crear, tabla del mes y CRUD completo.
-3. **Banco de Ideas** — Tabla filtrable por pilar, con hook, prioridad y marcador de usada/no usada. Contador de ideas no usadas en el sidebar.
-4. **Métricas y Objetivos** — Registro manual por post (reproducciones, likes, comentarios, guardados, seguidores, puntuación 1-5, notas), 3 gráficas y cards de objetivos mensuales.
+2. **Calendario** — Vista mensual navegable, posts por día con color por pilar, clic en un día para crear, tabla del mes y CRUD completo.
+3. **Ideas** — Tabla filtrable por pilar, con hook, prioridad y marcador de usada/no usada. Contador de ideas no usadas en el sidebar.
+4. **Métricas y Objetivos** — Registro manual por post (reproducciones, likes, comentarios, guardados, seguidores, puntuación 1-5, notas), gráficas Recharts y cards de objetivos mensuales.
 
 ---
 
-## Puesta en marcha (5 minutos)
+## Stack
 
-### 1. Crear el proyecto en Supabase
-1. Entra en [supabase.com](https://supabase.com) y crea una cuenta (gratis).
-2. **New project** → ponle un nombre (p.ej. `contentos`), elige región cercana (Frankfurt para Europa) y una contraseña de base de datos.
-3. Espera ~1 min a que se aprovisione.
+- **Framework:** Next.js 16 (App Router) + React + TypeScript
+- **Base de datos y Auth:** Supabase (Postgres + Row Level Security, cada fila protegida por `owner_id`)
+- **UI:** Tailwind CSS + shadcn/ui (tema oscuro)
+- **Gráficas:** Recharts
+- **Deploy:** Vercel
 
-### 2. Crear las tablas
-1. En el menú lateral abre **SQL Editor → New query**.
-2. Copia **todo** el contenido de [`supabase-setup.sql`](./supabase-setup.sql) y pégalo.
-3. Pulsa **Run**. Debe decir *Success*. Esto crea las tablas `posts`, `ideas`, `metricas`, `objetivos` y deja el acceso público con la anon key.
+---
 
-### 3. Copiar las credenciales
-1. Ve a **Project Settings → API**.
-2. Copia:
-   - **Project URL** → es tu `SUPABASE_URL` (algo como `https://xxxx.supabase.co`)
-   - **anon public** key → es tu `SUPABASE_ANON_KEY`
+## Desarrollo local
 
-### 4. Pegar las credenciales en la app
-Abre `index.html` y busca al inicio del `<script>` estas dos líneas:
+### 1. Instalar dependencias
 
-```js
-const SUPABASE_URL      = "PEGA_AQUI_TU_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "PEGA_AQUI_TU_SUPABASE_ANON_KEY";
+```bash
+npm install
 ```
 
-Sustituye los textos por tus valores reales y guarda.
+### 2. Variables de entorno
 
-### 5. Abrir la app
-- **En tu PC:** doble clic en `index.html` (se abre en el navegador).
-- Cuando esté conectada verás el indicador **● En la nube** arriba a la derecha.
+Copia el ejemplo y rellena tus valores de Supabase (Project Settings → API):
+
+```bash
+cp .env.example .env.local
+```
+
+Las claves que necesitas en `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<tu-proyecto>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-public-key>
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+```
+
+> No pongas los valores reales en el repo. `.env.local` está en `.gitignore`.
+
+### 3. Arrancar en local
+
+```bash
+npm run dev
+```
+
+Abre [http://localhost:3000](http://localhost:3000). La app redirige a `/login` si no hay sesión activa.
 
 ---
 
-## Acceder desde el móvil
+## Tests
 
-Como los datos viven en Supabase (la nube), puedes abrir la misma app desde cualquier dispositivo y verás los mismos datos. Para tenerla a mano en el móvil, alójala gratis en cualquiera de estos:
+```bash
+npm test
+```
 
-- **GitHub Pages** — sube el repo y actívalo en *Settings → Pages*.
-- **Vercel / Netlify** — arrastra la carpeta o conecta el repo. Deploy en segundos.
-
-> ⚠️ La `anon key` queda visible en el código (es público por diseño en esta fase, sin login). Las políticas RLS de `supabase-setup.sql` permiten lectura/escritura pública. Cuando quieras proteger el acceso, añade Supabase Auth y endurece las políticas RLS.
-
-Una vez desplegada, abre la URL en el móvil y **Añadir a pantalla de inicio** para usarla como una app. El sidebar se colapsa automáticamente en pantallas pequeñas (botón ☰).
+La suite usa Vitest y cubre la capa de datos (`lib/data`) y las constantes compartidas (`lib/constants`). Deben pasar 34/34.
 
 ---
 
-## Detalles técnicos
+## Migraciones de base de datos
 
-- **Sin build, sin dependencias locales.** Todo el CSS y JS va embebido en `index.html`.
-- **Supabase JS** desde CDN: `https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2`
-- **Chart.js** desde CDN para las gráficas.
-- **Fuentes:** Space Grotesk (display) + Inter (body) desde Google Fonts.
-- **Tema:** oscuro por defecto con toggle a claro (se recuerda en `localStorage`).
-- **Persistencia inmediata:** cada guardado escribe en Supabase y refresca la UI al instante, sin recargar la página.
+Las migraciones viven en `supabase/migrations/`. Para aplicarlas a tu proyecto de Supabase:
 
-## Estructura de tablas
+```bash
+supabase db push
+```
 
-| Tabla | Campos clave |
-|---|---|
-| `posts` | fecha, plataforma, pilar, formato, titulo, estado, enlace |
-| `ideas` | fecha, pilar, titulo, hook, prioridad, usada |
-| `metricas` | fecha, titulo, plataforma, pilar, reproducciones, likes, comentarios, guardados, seguidores_ganados, puntuacion, notas |
-| `objetivos` | mes, tiktok_inicio/fin, ig_inicio/fin, posts_objetivo, posts_publicados, mejor_post, aprendizajes |
+Requiere tener el CLI de Supabase instalado (`npm install -g supabase`) y el proyecto vinculado (`supabase link`).
+
+---
+
+## Estructura de carpetas
+
+```
+app/                   # Rutas Next.js (App Router)
+  (app)/               # Layout autenticado
+  auth/signout/        # Acción de logout
+  login/               # Página pública de login
+components/            # Componentes React reutilizables
+  charts/              # Gráficas Recharts
+  ideas/               # Componentes de la sección Ideas
+  metricas/            # Componentes de Métricas y Objetivos
+  posts/               # Componentes de Calendario
+  ui/                  # Primitivos shadcn/ui
+lib/
+  data/                # Capa de acceso a datos (Supabase queries)
+  supabase/            # Clientes Supabase (browser + server)
+  constants.ts         # Pilares, plataformas, formatos y estados compartidos
+supabase/
+  migrations/          # Migraciones SQL (aplicadas con supabase db push)
+```
+
+---
+
+## Roadmap
+
+- **Fase 2 — Ingesta automática:** conexión con la API de Instagram/TikTok para importar métricas de rendimiento sin entrada manual.
+- **Fase 3 — Análisis automático:** sugerencias de contenido, detección de tendencias y puntuación de ideas basada en historial de rendimiento.
