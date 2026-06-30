@@ -7,7 +7,7 @@ export default async function CalendarioPage() {
   return (
     <>
       <AppHeader title="Calendario Editorial" subtitle="Planifica y organiza tus publicaciones" />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <CalendarioClient posts={posts} />
       </div>
     </>

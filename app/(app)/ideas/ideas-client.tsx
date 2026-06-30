@@ -128,7 +128,7 @@ export function IdeasClient({ ideas }: { ideas: Idea[] }) {
                   {idea.pilar}
                 </Badge>
               </TableCell>
-              <TableCell className="max-w-[200px] truncate text-muted-foreground">
+              <TableCell className="max-w-xs whitespace-pre-line align-top text-sm text-muted-foreground">
                 {idea.hook ?? "—"}
               </TableCell>
               <TableCell>{idea.prioridad}</TableCell>

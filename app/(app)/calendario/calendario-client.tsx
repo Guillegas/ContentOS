@@ -124,9 +124,9 @@ export function CalendarioClient({ posts }: { posts: Post[] }) {
       </div>
 
       {/* Calendar grid */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className="border rounded-lg overflow-x-auto">
         {/* Day headers */}
-        <div className="grid grid-cols-7 bg-muted">
+        <div className="grid min-w-[560px] grid-cols-7 bg-muted">
           {DIAS_SEMANA.map((d) => (
             <div
               key={d}
@@ -138,7 +138,7 @@ export function CalendarioClient({ posts }: { posts: Post[] }) {
         </div>
 
         {/* Day cells */}
-        <div className="grid grid-cols-7 divide-x divide-y border-t">
+        <div className="grid min-w-[560px] grid-cols-7 divide-x divide-y border-t">
           {dias.map((dia, idx) => {
             const key = ymd(dia);
             const dayPosts = postsByDate.get(key) ?? [];
