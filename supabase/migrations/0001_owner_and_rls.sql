@@ -6,6 +6,12 @@ alter table ideas     add column if not exists owner_id uuid references auth.use
 alter table metricas  add column if not exists owner_id uuid references auth.users(id) default auth.uid();
 alter table objetivos add column if not exists owner_id uuid references auth.users(id) default auth.uid();
 
+-- Asegurar RLS activado (idempotente; en producción ya estaba activo).
+alter table posts     enable row level security;
+alter table ideas     enable row level security;
+alter table metricas  enable row level security;
+alter table objetivos enable row level security;
+
 -- Eliminar las políticas públicas previas y crear políticas por dueño.
 do $$
 declare t text;

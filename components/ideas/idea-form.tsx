@@ -22,7 +22,11 @@ export function IdeaForm({ idea, onDone }: { idea?: Idea; onDone: () => void }) 
   const [hook, setHook] = useState(idea?.hook ?? "");
   const [prioridad, setPrioridad] = useState<string>(idea?.prioridad ?? "Media");
   const [fecha, setFecha] = useState(
-    idea?.fecha ?? new Date().toISOString().slice(0, 10)
+    idea?.fecha ??
+      (() => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      })()
   );
   const [saving, setSaving] = useState(false);
 
